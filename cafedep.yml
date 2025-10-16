@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: cafe-app
-        image: rishitham03/cafe-app:latest  # Replace with your own image if needed 
+        image: rishitham03/cap-digibank:v1.1.0  # Replace with your own image if needed 
         ports:
         - containerPort: 3003
         env:
