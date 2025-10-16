@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cafe-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cafe-app
+  template:
+    metadata:
+      labels:
+        app: cafe-app
+      annotations:
+        ad.datadoghq.com/cafe-app.logs: '[{"source":"nodejs","service":"cafe-service"},{"source":"nodejs","service":"cafe-app"}]'
+    spec:
+      containers:
+      - name: cafe-app
+        image: raminisrinidhi/cap-event-management:latest  # Replace with your own image if needed
+        ports:
+        - containerPort: 3003
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://cafe-mongodb-service:27017/cafe-db"
+        - name: PORT
+          value: "3003"
+        - name: HOST
+          value: "0.0.0.0"
+        - name: NODE_ENV
+          value: "production"
+        - name: DD_AGENT_HOST
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: DD_TRACE_AGENT_PORT
+          value: "8126"
+        - name: DD_ENV
+          value: "production"
+        - name: DD_SERVICE
+          value: "cafe-app"
+        - name: DD_VERSION
+          value: "1.0.0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cafe-service
+spec:
+  selector:
+    app: cafe-app
+  ports:
+  - port: 80
+    targetPort: 3003
+  type: LoadBalancer
