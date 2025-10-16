@@ -16,14 +16,14 @@ spec:
     spec:
       containers:
       - name: cafe-app
-        image: rishitham03/cafe-app1:latest # Replace with your own image if needed 
+        image: rishitham03/cap-digibank:v1.1.0 # Replace with your own image if needed 
         ports:
         - containerPort: 3000
         env:
         - name: MONGODB_URI
           value: "mongodb://cafe-mongodb-service:27017/cafe-db"
         - name: PORT
-          value: "3000"
+          value: "5000"
         - name: HOST
           value: "0.0.0.0"
         - name: NODE_ENV
